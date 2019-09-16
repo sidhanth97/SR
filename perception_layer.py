@@ -1,7 +1,7 @@
 from imports import *
 
 class VGGFeat(nn.Module):
-	def __init__(self, n_layers=16, use_bn=False, i_max_pool=0, include_max_pool=False):
+	def __init__(self, n_layers=16, use_bn=False, i_max_pool=3, include_max_pool=False):
 		super(VGGFeat, self).__init__()
 		if n_layers == 16:
 			if use_bn:
@@ -25,7 +25,7 @@ class VGGFeat(nn.Module):
 	def __break_layers(self, features, i, include_max_pool=False):
 		children = list(features.children())
 		max_pool_indices = [index for index, m in enumerate(children) if isinstance(m, nn.MaxPool2d)]
-		target_features = children[:max_pool_indices[i]] if include_max_pool else children[:max_pool_indices[i]-1]
+		target_features = children[:max_pool_indices[i]] if include_max_pool else children[:max_pool_indices[i]-2]
 		return nn.Sequential(*target_features)
 
 	def forward(self, input):
